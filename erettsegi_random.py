@@ -1,0 +1,87 @@
+import random
+import json
+import os
+# import requests
+import webbrowser
+import time
+
+# pl. http://dload.oktatas.educatio.hu/erettsegi/feladatok_2020tavasz_kozep/k_magyir_20maj_fl.pdf
+# ev = 2020 | evszak = tavasz | targy = kozep/k_magyir | ev2 = 20 | honap = maj
+
+EV = [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020]
+EVSZAK = ["osz", "tavasz"]
+TARGY = ["kozep/k_magyir", "emelt/e_matang", "kozep/k_tort", "emelt/e_angol", "kozep/k_fiz", "emelt/e_inf"]
+
+
+def random_website():
+    url = ""
+    url2 = ""
+    ev = random.choice(EV)
+    evszak = random.choice(EVSZAK)
+    targy = random.choice(TARGY)
+
+    #angol emelt matek nincs ősszel
+    while targy == "emelt/e_matang" and evszak == "osz":
+        evszak = random.choice(EVSZAK)
+
+    #még nem volt 2020-as őszi érettségi
+    while ev == 2020 and evszak == "osz":
+        evszak = random.choice(EVSZAK)
+
+    ev2 = str(ev)[-2:]
+
+    honap = ""
+    if evszak == "osz":
+        honap = "okt"
+    elif evszak == "tavasz":
+        honap = "maj"
+
+    url = f"http://dload.oktatas.educatio.hu/erettsegi/feladatok_{ev}{evszak}_{targy}_{ev2}{honap}_fl.pdf"
+
+    if targy == "emelt/e_angol":
+        url2 = f"http://dload.oktatas.educatio.hu/erettsegi/feladatok_{ev}{evszak}_{targy}_{ev2}{honap}_fl.mp3"
+    elif targy == "emelt/e_inf":
+        url2 = f"http://dload.oktatas.educatio.hu/erettsegi/feladatok_{ev}{evszak}_emelt/e_inffor_{ev2}{honap}_fl.zip"
+    else:
+        url2 = ""
+    
+    return (url, url2)
+    
+# Debug funkció random generált linkek működésének tesztelésére. raange: hány linket teszteljen le.
+# def test_links(raange):
+    # test_result = ""
+    # for i in range(raange):
+        # x = random_website()
+        # for z in x:
+            # if z != "":
+                # request = requests.get(z)
+                # if request.status_code != 200:
+                    # test_result += (f"\nProbléma! {z} nem megnyitható!")
+                # else:
+                    # test_result += (f"\n{z} működik.")
+
+    # test_result +=  ("\n\nTeszt kész.")
+    # return (test_result)
+
+# A funkció, ami megnyitja a böngészőben a linket, ráadásul listát tart (history.json) a már megnyitott linkekről, hogy ugyanaz az oldal ne nyíljon meg többször.
+def get_new_link():
+    x = random_website()
+    with open("history.json", "r") as f:
+        history = json.load(f)
+
+    while x[0] in history:
+        x = random_website()
+    
+    history[x[0]] = time.asctime()
+
+    with open("history.json", "w") as f:
+        json.dump(history, f, indent=4)
+    
+    print (x)
+    for i in reversed(x):
+        if i != "":
+            webbrowser.open(i, new=2)
+
+
+get_new_link()
+
