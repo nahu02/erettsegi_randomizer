@@ -11,14 +11,20 @@ import time
 EV = [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020]
 EVSZAK = ["osz", "tavasz"]
 TARGY = ["kozep/k_magyir", "emelt/e_matang", "kozep/k_tort", "emelt/e_angol", "kozep/k_fiz", "emelt/e_inf"]
+TARGY_alt = ["magyar", "matek", "töri", "angol", "fizika", "info"]
 
 
-def random_website():
+def random_website(targy=""):
     url = ""
     url2 = ""
     ev = random.choice(EV)
     evszak = random.choice(EVSZAK)
-    targy = random.choice(TARGY)
+    
+    if targy.lower() in TARGY_alt:
+        targy = TARGY[TARGY_alt.index(targy.lower())]
+
+    if targy not in TARGY: 
+        targy = random.choice(TARGY)
 
     #angol emelt matek nincs ősszel
     while targy == "emelt/e_matang" and evszak == "osz":
@@ -64,13 +70,13 @@ def random_website():
     # return (test_result)
 
 # A funkció, ami megnyitja a böngészőben a linket, ráadásul listát tart (history.json) a már megnyitott linkekről, hogy ugyanaz az oldal ne nyíljon meg többször.
-def get_new_link():
-    x = random_website()
+def get_new_link(tantargy_input=""):
+    x = random_website(tantargy_input)
     with open("history.json", "r") as f:
         history = json.load(f)
 
-    while x[0] in history:
-        x = random_website()
+    while x[0] in history: #ha az x már volt használva (a history.json szerint), generál egy új x-et
+        x = random_website(tantargy_input)
     
     history[x[0]] = time.asctime()
 
@@ -83,5 +89,5 @@ def get_new_link():
             webbrowser.open(i, new=2)
 
 
-get_new_link()
+get_new_link(input(f"Ha van tantárgyi preferenciád, az alábbi listából beírhatod az egyiket (ha nincs, csak nyomj egy entert):\n {TARGY_alt}\n"))
 
