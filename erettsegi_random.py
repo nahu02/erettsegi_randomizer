@@ -1,7 +1,7 @@
 import random
 import json
 import os
-# import requests
+import requests
 import webbrowser
 import time
 
@@ -30,10 +30,6 @@ def random_website(targy=""):
     while targy == "emelt/e_matang" and evszak == "osz":
         evszak = random.choice(EVSZAK)
 
-    #még nem volt 2020-as őszi érettségi
-    while ev == 2020 and evszak == "osz":
-        evszak = random.choice(EVSZAK)
-
     ev2 = str(ev)[-2:]
 
     honap = ""
@@ -54,20 +50,20 @@ def random_website(targy=""):
     return (url, url2)
     
 # Debug funkció random generált linkek működésének tesztelésére. raange: hány linket teszteljen le.
-# def test_links(raange):
-    # test_result = ""
-    # for i in range(raange):
-        # x = random_website()
-        # for z in x:
-            # if z != "":
-                # request = requests.get(z)
-                # if request.status_code != 200:
-                    # test_result += (f"\nProbléma! {z} nem megnyitható!")
-                # else:
-                    # test_result += (f"\n{z} működik.")
+def test_links(raange):
+    test_result = ""
+    for i in range(raange):
+        x = random_website()
+        for z in x:
+            if z != "":
+                request = requests.get(z)
+                if request.status_code != 200:
+                    test_result += (f"\nProbléma! {z} nem megnyitható!")
+                else:
+                    test_result += (f"\n{z} működik.")
 
-    # test_result +=  ("\n\nTeszt kész.")
-    # return (test_result)
+    test_result +=  ("\n\nTeszt kész.")
+    return (test_result)
 
 # A funkció, ami megnyitja a böngészőben a linket, ráadásul listát tart (history.json) a már megnyitott linkekről, hogy ugyanaz az oldal ne nyíljon meg többször.
 def get_new_link(tantargy_input=""):
@@ -88,6 +84,6 @@ def get_new_link(tantargy_input=""):
         if i != "":
             webbrowser.open(i, new=2)
 
-
-get_new_link(input(f"Ha van tantárgyi preferenciád, az alábbi listából beírhatod az egyiket (ha nincs, csak nyomj egy entert):\n {TARGY_alt}\n"))
+if __name__ == '__main__':
+    get_new_link(input(f"Ha van tantárgyi preferenciád, az alábbi listából beírhatod az egyiket (ha nincs, csak nyomj egy entert):\n {TARGY_alt}\n"))
 
