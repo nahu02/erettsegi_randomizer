@@ -19,7 +19,7 @@ targyak_neve = {"magyar" : "magyir",
 #                                   Változók                                   #
 # ---------------------------------------------------------------------------- #
 
-# --------------------- Bal oszlop változói (tantárgyak) --------------------- #
+# --------------------- 1. oszlop változói (tantárgyak) --------------------- #
 v_magyar = tk.StringVar()
 v_matek = tk.StringVar()
 v_töri = tk.StringVar()
@@ -27,13 +27,20 @@ v_angol = tk.StringVar()
 v_fizika = tk.StringVar()
 v_infó = tk.StringVar()
 
+# --------------------- 2. oszlop változói (emelt?) --------------------- #
+v_magyar_e = tk.StringVar()
+v_matek_e = tk.StringVar()
+v_töri_e = tk.StringVar()
+v_angol_e = tk.StringVar()
+v_fizika_e = tk.StringVar()
+v_infó_e = tk.StringVar()
 
 
 # ---------------------------------------------------------------------------- #
 #                                  Checkboxok                                  #
 # ---------------------------------------------------------------------------- #
 
-# -------------------- Bal oszlop checkboxai (tantárgyak) -------------------- #
+# -------------------- 1. oszlop checkboxai (tantárgyak) -------------------- #
 c_magyar = tk.Checkbutton(window, text = "magyar", variable = v_magyar, onvalue = "ON", offvalue = "OFF", font = ('Arial', 20), anchor = "w", justify = "left")
 c_magyar.grid(row = 0, column = 0, sticky = "w")
 c_magyar.select()
@@ -58,22 +65,53 @@ c_infó = tk.Checkbutton(window, text = "infó", variable = v_infó, onvalue = "
 c_infó.grid(row = 5, column = 0, sticky = "w")
 c_infó.select()
 
+# -------------------- 2. oszlop checkboxai (emelt?) -------------------- #
+c_magyar_e = tk.Checkbutton(window, text = "emelt", variable = v_magyar_e, onvalue = "ON", offvalue = "OFF", font = ('Arial', 20), anchor = "w", justify = "center")
+c_magyar_e.grid(row = 0, column = 1, sticky = "w")
+c_magyar_e.deselect()
+
+c_matek_e = tk.Checkbutton(window, text = "emelt", variable = v_matek_e, onvalue = "ON", offvalue = "OFF", font = ('Arial', 20), anchor = "w", justify = "center")
+c_matek_e.grid(row = 1, column = 1, sticky = "w")
+c_matek_e.deselect()
+
+c_töri_e = tk.Checkbutton(window, text = "emelt", variable = v_töri_e, onvalue = "ON", offvalue = "OFF", font = ('Arial', 20), anchor = "w", justify = "center")
+c_töri_e.grid(row = 2, column = 1, sticky = "w")
+c_töri_e.deselect()
+
+c_angol_e = tk.Checkbutton(window, text = "emelt", variable = v_angol_e, onvalue = "ON", offvalue = "OFF", font = ('Arial', 20), anchor = "w", justify = "center")
+c_angol_e.grid(row = 3, column = 1, sticky = "w")
+c_angol_e.deselect()
+
+c_fizika_e = tk.Checkbutton(window, text = "emelt", variable = v_fizika_e, onvalue = "ON", offvalue = "OFF", font = ('Arial', 20), anchor = "w", justify = "center")
+c_fizika_e.grid(row = 4, column = 1, sticky = "w")
+c_fizika_e.deselect()
+
+c_infó_e = tk.Checkbutton(window, text = "emelt", variable = v_infó_e, onvalue = "ON", offvalue = "OFF", font = ('Arial', 20), anchor = "w", justify = "center")
+c_infó_e.grid(row = 5, column = 1, sticky = "w")
+c_infó_e.deselect()
+
 
 
 
 
 def click():
-    my_label = tk.Label(window, text = f'''
-                                magyar variable is {v_magyar.get()}
-                                matek variable is {v_matek.get()}
-                                töri variable is {v_töri.get()}
-                                angol variable is {v_angol.get()}
-                                fizika variable is {v_fizika.get()}
-                                infó variable is {v_infó.get()} 
+    show_value_label = tk.Label(window, text = f'''
+                                magyar is {v_magyar.get()}
+                                and emelt is {v_magyar_e.get()}
+                                matek is {v_matek.get()}
+                                and emelt is {v_matek_e.get()}
+                                töri is {v_töri.get()}
+                                and emelt is {v_töri_e.get()}
+                                angol is {v_angol.get()}
+                                and emelt is {v_angol_e.get()}
+                                fizika is {v_fizika.get()}
+                                and emelt is {v_fizika_e.get()}
+                                infó is {v_infó.get()}
+                                and emelt is {v_infó_e.get()}
                                 ''')
-    my_label.grid(row = 7)
+    show_value_label.grid(row = 7, column = 1)
 
 b1 = tk.Button(window, text = "Show value", command = click)
-b1.grid(row = 6)
+b1.grid(row = 6, column = 1)
 
 window.mainloop()
