@@ -14,7 +14,7 @@ TARGY = ["kozep/k_magyir", "emelt/e_matang", "kozep/k_tort", "emelt/e_angol", "k
 TARGY_alt = ["magyar", "matek", "töri", "angol", "fizika", "info"]
 
 
-def random_website(targy=""):
+def random_website(targy = "", options = TARGY):
     url = ""
     url2 = ""
     ev = random.choice(EV)
@@ -24,7 +24,7 @@ def random_website(targy=""):
         targy = TARGY[TARGY_alt.index(targy.lower())]
 
     if targy not in TARGY: 
-        targy = random.choice(TARGY)
+        targy = random.choice(options)
 
     #angol emelt matek nincs ősszel
     while targy == "emelt/e_matang" and evszak == "osz":
