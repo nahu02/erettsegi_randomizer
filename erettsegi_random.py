@@ -24,10 +24,13 @@ def random_website(targy = "", options = TARGY):
         targy = TARGY[TARGY_alt.index(targy.lower())]
 
     if targy not in TARGY: 
-        targy = random.choice(options)
+        try:
+            targy = random.choice(options)
+        except IndexError:
+            raise IndexError("Nincs választási opció, az 'options' lista üres.")
 
-    #angol emelt matek nincs ősszel
-    while targy == "emelt/e_matang" and evszak == "osz":
+    #angol nyelvű tárgyak nincsenk ősszel (pl matek, fizika), de angol van
+    while "ang" in targy and targy != "angol" and evszak == "osz":
         evszak = random.choice(EVSZAK)
 
     ev2 = str(ev)[-2:]
@@ -40,14 +43,18 @@ def random_website(targy = "", options = TARGY):
 
     url = f"http://dload.oktatas.educatio.hu/erettsegi/feladatok_{ev}{evszak}_{targy}_{ev2}{honap}_fl.pdf"
 
-    if targy == "emelt/e_angol":
+    if "angol" in targy:
         url2 = f"http://dload.oktatas.educatio.hu/erettsegi/feladatok_{ev}{evszak}_{targy}_{ev2}{honap}_fl.mp3"
-    elif targy == "emelt/e_inf":
-        url2 = f"http://dload.oktatas.educatio.hu/erettsegi/feladatok_{ev}{evszak}_emelt/e_inffor_{ev2}{honap}_fl.zip"
+    elif "inf" in targy:
+        url2 = f"http://dload.oktatas.educatio.hu/erettsegi/feladatok_{ev}{evszak}_{targy}for_{ev2}{honap}_fl.zip"
     else:
         url2 = ""
-    
-    return (url, url2)
+
+    try:
+        return (url, url2)
+    finally:
+        if not requests.get(url):
+            raise ConnectionError(f"Valami nem jó. A {url} nem nyitható meg.")
     
 # Debug funkció random generált linkek működésének tesztelésére. raange: hány linket teszteljen le.
 def test_links(raange):
@@ -65,24 +72,36 @@ def test_links(raange):
     test_result +=  ("\n\nTeszt kész.")
     return (test_result)
 
-# A funkció, ami megnyitja a böngészőben a linket, ráadásul listát tart (history.json) a már megnyitott linkekről, hogy ugyanaz az oldal ne nyíljon meg többször.
-def get_new_link(tantargy_input=""):
-    x = random_website(tantargy_input)
+def random_website_with_history_check(targy = "", options = TARGY):
+    x = random_website(targy, options)
     with open("history.json", "r") as f:
         history = json.load(f)
 
-    while x[0] in history: #ha az x már volt használva (a history.json szerint), generál egy új x-et
-        x = random_website(tantargy_input)
+    while x[0] in history: # ha az x már volt használva (a history.json szerint), generál egy új x-et
+        x = random_website(targy, options)
     
-    history[x[0]] = time.asctime()
+    return x
+
+def add_website_to_history(websites):
+    with open("history.json", "r") as f:
+        history = json.load(f)
+    
+    history[websites[0]] = time.asctime()
 
     with open("history.json", "w") as f:
         json.dump(history, f, indent=4)
     
-    print (x)
-    for i in reversed(x):
+def open_websites(websites):
+    print (f"Opening: {websites}")
+    for i in reversed(websites):
         if i != "":
             webbrowser.open(i, new=2)
+
+# A funkció, ami megnyitja a böngészőben a linket, ráadásul listát tart (history.json) a már megnyitott linkekről, hogy ugyanaz az oldal ne nyíljon meg többször.
+def get_new_link(tantargy_input=""):
+    x = random_website_with_history_check(tantargy_input)
+    add_website_to_history(x)
+    open_websites(x)
 
 if __name__ == '__main__':
     get_new_link(input(f"Ha van tantárgyi preferenciád, az alábbi listából beírhatod az egyiket (ha nincs, csak nyomj egy entert):\n {TARGY_alt}\n"))
