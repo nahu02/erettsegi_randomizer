@@ -30,7 +30,9 @@ def random_website(targy = "", options = TARGY):
             raise IndexError("Nincs választási opció, az 'options' lista üres.")
 
     #angol nyelvű tárgyak nincsenk ősszel (pl matek, fizika), de angol van
-    while "ang" in targy and targy != "angol" and evszak == "osz":
+    while "ang" in targy and evszak == "osz":
+        if "angol" in targy:
+            break
         evszak = random.choice(EVSZAK)
 
     ev2 = str(ev)[-2:]
