@@ -6,5 +6,4 @@ TO-DO:
   - Új tantárgyak hozzáadásának kód nélküli lehetővé tétele (config fájl (cvs?) )
   - Régebbi felvételik (?) 
   - Piackutatás
-  - Valamiféle kis help írás; használati útmutató (Help menü?)
   - legördülő menüs megoldókulcs választás (?) (hogy bármilyen tárgyból lehessen)

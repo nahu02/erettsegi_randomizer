@@ -14,13 +14,20 @@ class Tantargy:
         Tantargy.osszes_tantargy.append(self)
         self.id = Tantargy.counter
         Tantargy.counter += 1
-        self.canvas = canvas            # A vászon amin lesznek a dobozok
-        self.nev = nev                  # Ami a checkbox mellé van írva
-        self.online_nev = online_nev    # Ahogy a tantárgy a linkekben megjelenik (pl. magyir, mat)
-        self.angol = angol              # Bool. Van -e angol változata a tantárgynak? (pl. matek,fizika)
-        self.v1 = tk.BooleanVar()       # Az első oszlop változója (ki van választva?)
-        self.v2 = tk.BooleanVar()       # A második oszlop változója (emelt?)
-        self.v3 = tk.BooleanVar()       # A harmadik oszlop változója (angol?)
+        # A vászon amin lesznek a dobozok
+        self.canvas = canvas
+        # Ami a checkbox mellé van írva
+        self.nev = nev
+        # Ahogy a tantárgy a linkekben megjelenik (pl. magyir, mat)
+        self.online_nev = online_nev
+        # Bool. Van -e angol változata a tantárgynak? (pl. matek,fizika)
+        self.angol = angol
+        # Az első oszlop változója (ki van választva?)
+        self.v1 = tk.BooleanVar()
+        # A második oszlop változója (emelt?)
+        self.v2 = tk.BooleanVar()
+        # A harmadik oszlop változója (angol?)
+        self.v3 = tk.BooleanVar()
 
         # ------------------ 1. oszlop checkboxai (tantárgyak) ------------------ #
         self.c1 = ttk.Checkbutton(self.canvas, text=self.nev, variable=self.v1,
@@ -62,12 +69,12 @@ def main():
     window = ThemedTk(theme=themeVar)
     window.title("Érettségi GUI - beta")
     window.iconbitmap("GUI\\book.ico")
-    window.geometry("510x400")
+    window.geometry("650x480")
 
     frame0 = ttk.Frame(window)
     frame0.pack(expand=True, fill=tk.BOTH)
-    frame = ttk.Frame(frame0)
-    frame.pack(expand=True, anchor="center", side="top")
+    frame1 = ttk.Frame(frame0)
+    frame1.pack(expand=True, anchor="center", side="top")
     frame2 = ttk.Frame(frame0)
     frame2.pack(expand=True, anchor="center", side="top")
     frame3 = ttk.Frame(frame0)
@@ -76,18 +83,23 @@ def main():
     style = ttk.Style()
     style.configure(".", font=('Helvetica', 18), justify=tk.LEFT)
     style.configure("TButton", font=("Helvetica", "11"))
+    style.configure("help.TLabel", font=("Helvetica", "14"), justify=tk.CENTER)
 
 # ----------------------------- Beállítások menü ----------------------------- #
     menubar = tk.Menu(window)
     window.config(menu=menubar)
 
-    history = tk.BooleanVar()  # Megjegyezze -e a program a generált linkeket (többször nem generálódnak)
+    # Megjegyezze -e a program a generált linkeket (többször nem generálódnak)
+    history = tk.BooleanVar()
     selected_theme = tk.StringVar()  # A kiválasztott téma
     selected_theme.set("adapta")
 
     def change_theme():
         window.set_theme(selected_theme.get())
         style.configure(".", font=('Helvetica', 18), justify=tk.LEFT)
+        style.configure("TButton", font=("Helvetica", "11"))
+        style.configure("help.TLabel", font=(
+            "Helvetica", "14"), justify=tk.CENTER)
 
     menubar = tk.Menu(window)
 
@@ -106,13 +118,18 @@ def main():
 
     window.config(menu=menubar)
 
+# ------------------------------ Help feliratok ------------------------------ #
+
+    ttk.Label(frame1, style="help.TLabel", text="Ez egy random érettségi feladatsor generátor.\nVálaszd ki melyik tárgyak közül kapj egy feladatsort (véletlenszerűen),\nmajd az 'Érettségi feladat link' gombra kattintva kaphatsz egy linket!\n\nLejjebb, a dobozba egy érettségi feladatsor linkjét beillesztve\nmegkaphatod a hozzá tartozó javítókulcs elérhetőségét.").grid(
+        row=0, column=0, columnspan=3)
+    Tantargy.counter += 1
 # ------------------------- A tantárgyak létrehozása ------------------------- #
-    Tantargy(frame, "Magyar", "magyir")
-    Tantargy(frame, "Matek", "mat", True)
-    Tantargy(frame, "Töri", "tort")
-    Tantargy(frame, "Angol", "angol")
-    Tantargy(frame, "Fizika", "fiz", True)
-    Tantargy(frame, "Infó", "inf", True)
+    Tantargy(frame1, "Magyar", "magyir")
+    Tantargy(frame1, "Matek", "mat", True)
+    Tantargy(frame1, "Töri", "tort")
+    Tantargy(frame1, "Angol", "angol")
+    Tantargy(frame1, "Fizika", "fiz", True)
+    Tantargy(frame1, "Infó", "inf", True)
 
 # ----------------------------- A gomb és a link ----------------------------- #
     def open_erettsegi_link(event):
@@ -162,7 +179,7 @@ def main():
         webbrowser.open(megoldokulcs_link, new=2)
 
     e1 = ttk.Entry(frame3, textvariable=e1_var,
-                   width="77", font=("Helvetica", 7))
+                   width="80", font=("Helvetica", 8))
     e1.grid(row=0, column=0)
 
     b2 = ttk.Button(frame3, text="Megoldókulcs", command=b2_click)
