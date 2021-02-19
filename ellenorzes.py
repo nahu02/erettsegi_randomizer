@@ -12,5 +12,3 @@ url, time = last
 url = f"{url[:-6]}ut.pdf"
 
 webbrowser.open(url, new=2)
-
-
