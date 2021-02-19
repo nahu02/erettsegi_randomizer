@@ -9,7 +9,7 @@ class Tantargy:
     counter = 0             # Egy számláló, amelyel id adható az objektumoknak
     osszes_tantargy = []    # Egy lista, amiben az osztály összes objektuma megjelenik
 
-    def __init__ (self, canvas, nev, online_nev, angol):
+    def __init__ (self, canvas, nev, online_nev, angol = False):
         Tantargy.osszes_tantargy.append(self)
         self.id = Tantargy.counter
         Tantargy.counter += 1
@@ -57,6 +57,7 @@ def main():
     window = ThemedTk(theme = themeVar)
     window.title("Érettségi GUI - beta") 
     window.iconbitmap("GUI\\book.ico")
+    window.geometry("510x400")
 
     frame0 = ttk.Frame(window)
     frame0.pack(expand = True, fill = tk.BOTH)
@@ -64,6 +65,8 @@ def main():
     frame.pack(expand = True, anchor = "center", side="top")
     frame2 = ttk.Frame(frame0)
     frame2.pack(expand = True, anchor = "center", side="top")
+    frame3 = ttk.Frame(frame0)
+    frame3.pack(expand = True, anchor = "center", side="top")
 
     style = ttk.Style()
     style.configure(".", font = ('Helvetica', 18), justify = tk.LEFT)
@@ -94,21 +97,24 @@ def main():
     menubar.add_cascade(label = "Nézet", menu = view)
 
     window.config(menu = menubar)  
+
 # ------------------------- A tantárgyak létrehozása ------------------------- #
-    Tantargy(frame, "Magyar", "magyir", False)
+    Tantargy(frame, "Magyar", "magyir")
     Tantargy(frame, "Matek", "mat", True)
-    Tantargy(frame, "Töri", "tort", False)
-    Tantargy(frame, "Angol", "angol", False)
+    Tantargy(frame, "Töri", "tort")
+    Tantargy(frame, "Angol", "angol")
     Tantargy(frame, "Fizika", "fiz", True)
     Tantargy(frame, "Infó", "inf", True)
 
 # ----------------------------- A gomb és a link ----------------------------- #
-    def open_link(event):
+    def open_erettsegi_link(event):
         if history.get():
             add_website_to_history(linkek)
         open_websites(linkek)
+        e1_var.set(linkek[0])
+        b2_click()
 
-    def click():
+    def b1_click():
         final_options = []
 
         for targy in Tantargy.osszes_tantargy:
@@ -124,15 +130,39 @@ def main():
 
         global linkek
         linkek = random_website_with_history_check(options = final_options)
-        link_label.config(text = linkek[0])
-        link_label.pack()
+        l2.config(text = linkek[0])
+        l2.pack()
 
 
-    b1 = ttk.Button(frame2, text = "Érettségi feladat link", command = click)
+    b1 = ttk.Button(frame2, text = "Érettségi feladat link", command = b1_click)
     b1.pack()
 
-    link_label = ttk.Label(frame2, cursor = "hand2", font = ("Helvetica", "8"), foreground = "blue")
-    link_label.bind("<Button-1>", open_link)
+    l2 = ttk.Label(frame2, cursor = "hand2", font = ("Helvetica", "9"), foreground = "blue")
+    l2.bind("<Button-1>", open_erettsegi_link)
+
+# ---------------------------- Ellenőrzés felület ---------------------------- #
+    e1_var = tk.StringVar()
+    
+    def b2_click():
+        if e1_var.get():
+            global megoldokulcs_link
+            megoldokulcs_link = f"{e1_var.get()[:-6]}ut.pdf"
+            l3.config(text = megoldokulcs_link)
+            l3.grid(row = 1, column = 0, columnspan = 2)
+
+    def open_erettsegi_megoldokulcs_link(event):
+        webbrowser.open(megoldokulcs_link, new=2)
+
+    e1 = ttk.Entry(frame3, textvariable = e1_var, width = "77", font = ("Helvetica", 7))
+    e1.grid(row = 0, column = 0)
+
+    style.configure("TButton", font = ("Helvetica", "11"))
+
+    b2 = ttk.Button(frame3, text = "Megoldókulcs", command = b2_click)
+    b2.grid(row = 0, column = 1)
+
+    l3 = ttk.Label(frame3, cursor = "hand2", font = ("Helvetica", "9"), foreground = "blue")
+    l3.bind("<Button-1>", open_erettsegi_megoldokulcs_link)
 
     window.mainloop()
 
