@@ -126,7 +126,7 @@ def main():
 # ------------------------- A tantárgyak létrehozása ------------------------- #
     Tantargy(frame1, "Magyar", "magyir")
     Tantargy(frame1, "Matek", "mat", True)
-    Tantargy(frame1, "Töri", "tort")
+    Tantargy(frame1, "Töri", "tort", True)
     Tantargy(frame1, "Angol", "angol")
     Tantargy(frame1, "Fizika", "fiz", True)
     Tantargy(frame1, "Infó", "inf", True)
