@@ -7,3 +7,4 @@ TO-DO:
   - Régebbi felvételik (?) 
   - Piackutatás
   - legördülő menüs megoldókulcs választás (?) (hogy bármilyen tárgyból lehessen)
+  - Időzítő indítása automatikusan (időzítő weboldal link?)
