@@ -89,10 +89,20 @@ def main():
     menubar = tk.Menu(window)
     window.config(menu=menubar)
 
+    # A settings.json beolvasása
+    with open("settings.json", "r") as s:
+        settings_file = json.load(s)
+
     # Megjegyezze -e a program a generált linkeket (többször nem generálódnak)
     history = tk.BooleanVar()
+    history.set(settings_file["History"])
     selected_theme = tk.StringVar()  # A kiválasztott téma
     selected_theme.set("adapta")
+
+    def change_history():
+        settings_file["History"] = history.get()
+        with open("settings.json", "w") as s:
+            json.dump(settings_file, s, indent=4)
 
     def change_theme():
         window.set_theme(selected_theme.get())
@@ -105,7 +115,7 @@ def main():
 
     settings = tk.Menu(menubar, tearoff=0)
     settings.add_checkbutton(label="Megnyitott linkek megjegyzése (többször nem generálódnak)",
-                             variable=history, onvalue=True, offvalue=False)
+                             variable=history, onvalue=True, offvalue=False, command=change_history)
     menubar.add_cascade(label="Beállítások", menu=settings)
 
     view = tk.Menu(menubar, tearoff=0)
@@ -194,3 +204,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    input()
